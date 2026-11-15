@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Okruh: mapa s okruhy podle vzdálenosti nebo času cesty.
+     Internet: mapa z OpenStreetMap, trasy z OSRM, hledání míst. Poloha: střed okruhu, jen když je appka otevřená. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cz.adamhorak.okruh">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:label="@string/nazev"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:theme="@style/Motiv"
+        android:allowBackup="false">
+
+        <activity
+            android:name=".Hlavni"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

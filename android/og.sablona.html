@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<!-- Náhled odkazu 1200x630 (og:image). py android/stranka.py --og z něj vyrobí stahnout/og.jpg. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=block">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body { position: relative; background: #f6f4ee; color: #3b3f46; font-family: Barlow, Arial, sans-serif; }
+  .mapa { position: absolute; right: 0; top: 0; bottom: 0; width: 470px; background: #e8e4da url("{{TELEFON}}") center 38% / 470px auto no-repeat; }
+  .text { position: absolute; left: 90px; top: 0; bottom: 0; width: 600px; display: flex; flex-direction: column; justify-content: center; }
+  .hlava { display: flex; align-items: center; gap: 26px; }
+  .logo { width: 120px; height: 120px; }
+  .nadtitul { margin: 0 0 6px; font-size: 22px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #626872; }
+  h1 { margin: 0; font: 700 132px/.85 "Barlow Condensed", Arial, sans-serif; text-transform: uppercase; color: #17191d; }
+  p.perex { margin: 34px 0 0; color: #17191d; font-size: 36px; line-height: 1.3; }
+  .adresa { margin: 30px 0 0; font: 700 26px/1 "Barlow Condensed", Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #d63d22; }
+</style>
+</head>
+<body>
+  <div class="mapa"></div>
+  <div class="text">
+    <div class="hlava">
+      {{LOGO}}
+      <div>
+        <p class="nadtitul">Aplikace pro Android</p>
+        <h1>Okruh</h1>
+      </div>
+    </div>
+    <p class="perex">Kam se dostaneš za hodinu autem, na kole nebo pěšky.</p>
+    <p class="adresa">okruh.adamhorak.cz</p>
+  </div>
+</body>
+</html>

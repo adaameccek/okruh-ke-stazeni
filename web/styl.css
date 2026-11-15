@@ -1,0 +1,150 @@
+/* Vzhled vychází z námořních a leteckých map (dosahové kruhy, tlumený podklad, jedna signální barva
+   na kruh) a z dopravního značení (písmo Barlow je odvozené z kalifornských silničních cedulí). */
+:root {
+  --papir: #f6f4ee;
+  --inkoust: #17191d;
+  --tlumeny: #626872;
+  --linka: #d9d5ca;
+  --plocha: #e9e6dd;
+  --stin: 0 2px 14px rgba(30, 28, 20, .18);
+  --b: #e4472b;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --papir: #16181b;
+    --inkoust: #eceae4;
+    --tlumeny: #9ba1a9;
+    --linka: #30333a;
+    --plocha: #24272c;
+    --stin: 0 2px 16px rgba(0, 0, 0, .55);
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; margin: 0; overflow: hidden; background: var(--papir); }
+body {
+  color: var(--inkoust);
+  font: 500 15px/1.3 Barlow, system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+button, input { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+
+#mapa { position: relative; flex: 1; min-height: 0; overflow: hidden; background: #e8e4da; }
+#mapa canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#dlazdice { filter: saturate(.55) contrast(.95) brightness(1.02); }
+#vrstva { touch-action: none; cursor: grab; }
+#vrstva:active { cursor: grabbing; }
+@media (prefers-color-scheme: dark) {
+  #mapa { background: #1c1f22; }
+  #dlazdice { filter: invert(1) hue-rotate(180deg) saturate(.45) brightness(.82); }
+}
+
+#ja {
+  position: absolute; right: 12px; top: calc(12px + env(safe-area-inset-top));
+  width: 44px; height: 44px; display: grid; place-items: center;
+  background: var(--papir); border-radius: 4px; box-shadow: var(--stin);
+}
+#ja.bez { color: var(--tlumeny); }
+#atribuce {
+  position: absolute; right: 6px; bottom: 4px; font-size: 11px; color: #3c4046;
+  text-decoration: none; text-shadow: 0 0 3px #fff, 0 0 3px #fff;
+}
+@media (prefers-color-scheme: dark) {
+  #atribuce { color: #c6cad0; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+}
+
+#bublina {
+  position: absolute; left: 0; top: 0; width: 232px; padding: 10px 12px 8px;
+  background: var(--papir); border-radius: 4px; box-shadow: var(--stin);
+}
+#bublina[hidden] { display: none; }
+#bublina-text { margin: 0 0 6px; line-height: 1.35; }
+#bublina-text b { font-weight: 600; }
+#bublina-text small { display: block; color: var(--tlumeny); font-size: 13px; }
+#bublina-okruh { color: var(--b); font-weight: 600; min-height: 32px; }
+
+#panel {
+  background: var(--papir); padding: 8px 14px calc(10px + env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 14px rgba(30, 28, 20, .14); position: relative; z-index: 2;
+}
+#panel [hidden] { display: none; }
+
+#okruhy { display: flex; gap: 2px; overflow-x: auto; margin: 0 -14px; padding: 0 14px; scrollbar-width: none; }
+#okruhy::-webkit-scrollbar { display: none; }
+#okruhy button {
+  flex: none; min-height: 44px; padding: 4px 10px 4px 0; text-align: left; line-height: 1.15;
+  display: flex; align-items: center; gap: 7px; color: var(--tlumeny); font-size: 14px;
+}
+#okruhy i { width: 11px; height: 11px; border-radius: 50%; border: 2.5px solid var(--b); flex: none; }
+#okruhy .vybrany { color: var(--inkoust); font-weight: 600; }
+#okruhy .vybrany i { background: var(--b); }
+#okruhy small { display: block; font-size: 12px; font-weight: 500; color: var(--tlumeny); max-width: 110px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#okruhy .pridat { color: var(--inkoust); font-weight: 600; padding-left: 4px; white-space: nowrap; }
+
+.hodnota { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+#cislo {
+  width: 3.1ch; min-width: 0; font: 700 44px/1 "Barlow Condensed", Barlow, sans-serif;
+  background: none; border: 0; border-bottom: 2px solid var(--linka); border-radius: 0; padding: 0 0 1px;
+  font-variant-numeric: tabular-nums; outline: none;
+}
+#cislo:focus { border-bottom-color: var(--b); }
+.jednotky { display: flex; flex: none; }
+.jednotky button { min-width: 42px; height: 40px; font-weight: 600; background: var(--plocha); color: var(--tlumeny); }
+.jednotky button:first-child { border-radius: 3px 0 0 3px; }
+.jednotky button:last-child { border-radius: 0 3px 3px 0; }
+.jednotky .vybrany { background: var(--b); color: #fff; }
+.misto { flex: 1; min-width: 0; color: var(--tlumeny); font-size: 14px; line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+#smazat { width: 40px; height: 44px; flex: none; display: grid; place-items: center; color: var(--tlumeny); }
+
+#posuvnik {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 34px; margin: 2px 0; background: none; display: block; cursor: pointer;
+}
+#posuvnik::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 2px;
+  background: linear-gradient(to right, var(--b) var(--p, 0%), var(--linka) var(--p, 0%));
+}
+#posuvnik::-moz-range-track { height: 4px; border-radius: 2px; background: var(--linka); }
+#posuvnik::-moz-range-progress { height: 4px; background: var(--b); }
+#posuvnik::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 24px; height: 24px; margin-top: -10px; border-radius: 50%;
+  background: var(--b); border: 3px solid var(--papir); box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+}
+#posuvnik::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--b); border: 3px solid var(--papir); }
+
+#zpusoby { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+#zpusoby button { background: var(--plocha); padding: 6px 2px 7px; text-align: center; color: var(--tlumeny); font-size: 13px; line-height: 1.15; }
+#zpusoby button:first-child { border-radius: 3px 0 0 3px; }
+#zpusoby button:last-child { border-radius: 0 3px 3px 0; }
+#zpusoby b {
+  display: block; font: 700 19px/1.1 "Barlow Condensed", Barlow, sans-serif; color: var(--inkoust);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+#zpusoby .odhad b { color: var(--tlumeny); }
+#zpusoby .vybrany { background: var(--b); color: #fff; }
+#zpusoby .vybrany b { color: #fff; }
+#poznamka { margin: 7px 0 0; min-height: 18px; font-size: 13px; line-height: 1.3; color: var(--tlumeny); }
+
+.hledani { display: flex; align-items: center; gap: 6px; }
+#hledat {
+  flex: 1; min-width: 0; height: 46px; padding: 0 10px; font-size: 17px; background: var(--plocha);
+  border: 0; border-radius: 3px; outline: none;
+}
+#zpet { width: 44px; height: 46px; flex: none; display: grid; place-items: center; color: var(--tlumeny); }
+#nabidka { list-style: none; margin: 4px 0 0; padding: 0; max-height: 34vh; overflow-y: auto; }
+#nabidka button { display: block; width: 100%; min-height: 46px; padding: 6px 2px; text-align: left; border-bottom: 1px solid var(--linka); line-height: 1.2; }
+#nabidka small { display: block; color: var(--tlumeny); font-size: 13px; }
+#napoveda { margin: 8px 0 2px; color: var(--tlumeny); font-size: 14px; }
+
+/* Na šířku a na PC je panel vlevo a mapa jde až na kraj. */
+@media (min-width: 760px), (orientation: landscape) and (min-width: 560px) {
+  body { display: block; }
+  #mapa { position: absolute; inset: 0; }
+  #panel {
+    position: absolute; left: 12px; top: 12px; width: 356px; border-radius: 4px; box-shadow: var(--stin);
+    max-height: calc(100dvh - 24px); overflow-y: auto;
+  }
+}

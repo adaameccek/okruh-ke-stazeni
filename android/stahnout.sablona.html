@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Okruh pro Android</title>
+<meta name="description" content="Okruh: kam se dostaneš za hodinu autem nebo do 100 km. Appka pro Android ke stažení.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Okruh">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Okruh - appka pro Android">
+<meta property="og:description" content="Kam se dostaneš za hodinu autem, na kole nebo pěšky. Stáhneš přímo tady.">
+<meta property="og:image" content="https://okruh.adamhorak.cz/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Okruh - aplikace pro Android">
+<meta property="og:url" content="https://okruh.adamhorak.cz/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f6f4ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap">
+<!-- Vygenerováno z android/stahnout.sablona.html přes py android/stranka.py (verze, velikost, QR).
+     Tenhle soubor needitovat ručně, změny patří do šablony.
+     Vzhled jako appka (papír, signální červená, Barlow). Málo textu, jeden snímek appky,
+     tři kroky a QR jen na počítači (Adamova pravidla pro stránky ke stažení). -->
+<style>
+  :root {
+    --papir: #f6f4ee; --inkoust: #17191d; --text: #3b3f46; --tlumeny: #626872; --linka: #d9d5ca;
+    --cervena: #d63d22; --na-cervene: #ffffff; --ram: #17191d;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --papir: #16181b; --inkoust: #eceae4; --text: #c9ccd1; --tlumeny: #9ba1a9; --linka: #30333a;
+      --cervena: #ef5a3c; --na-cervene: #16181b; --ram: #000000;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; background: var(--papir); color: var(--text); font: 400 17px/1.45 Barlow, system-ui, sans-serif; }
+  main { width: 100%; max-width: 920px; padding: max(28px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom)); display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; align-items: center; }
+  .text { max-width: 400px; width: 100%; margin: 0 auto; }
+  b { font-weight: 600; color: var(--inkoust); }
+  a { color: var(--cervena); }
+  :focus-visible { outline: 2px solid var(--cervena); outline-offset: 3px; }
+
+  .hlava { display: flex; align-items: center; gap: 14px; }
+  .logo { display: block; flex: none; width: 52px; height: 52px; }
+  h1 { margin: 0; font: 700 clamp(46px, 14vw, 64px)/.9 "Barlow Condensed", Barlow, sans-serif; letter-spacing: .01em; text-transform: uppercase; color: var(--inkoust); }
+  .pod { margin: 4px 0 0; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tlumeny); }
+  .perex { margin: 20px 0 0; font-size: 20px; line-height: 1.35; color: var(--inkoust); }
+
+  .stahnout {
+    display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 24px; min-height: 60px; padding: 16px 24px;
+    background: var(--cervena); color: var(--na-cervene); text-decoration: none; border-radius: 2px;
+    font: 700 19px/1 "Barlow Condensed", Barlow, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+  }
+  .stahnout svg { flex: none; width: 20px; height: 20px; }
+  .stahnout:active { opacity: .85; }
+  .meta { margin: 10px 0 0; font-size: 14px; color: var(--tlumeny); font-variant-numeric: tabular-nums; }
+
+  /* po klepnutí na tlačítko: Chrome malý soubor stáhne skoro neviditelně, proto to řekne stránka */
+  .po { margin: 10px 0 0; padding: 12px 14px; border-left: 3px solid var(--cervena); background: color-mix(in srgb, var(--cervena) 9%, transparent); color: var(--inkoust); font-size: 16px; }
+  .po[hidden] { display: none; }
+
+  ol { margin: 26px 0 0; padding: 20px 0 0; list-style: none; border-top: 1px solid var(--linka); counter-reset: krok; }
+  li { position: relative; padding: 0 0 12px 2em; counter-increment: krok; font-size: 16px; }
+  li::before { content: counter(krok); position: absolute; left: 0; top: -.14em; font: 700 24px/1.2 "Barlow Condensed", Barlow, sans-serif; color: var(--cervena); }
+  li:last-child { padding-bottom: 0; }
+
+  .qr { display: none; align-items: center; gap: 16px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--linka); font-size: 15px; }
+  .qr .kod { flex: none; background: #fff; padding: 8px; line-height: 0; }
+  /* kód v přirozené velikosti (4 px na modul), jinak vyjdou čtverečky nestejné a čtečka ho nepřečte */
+  .qr .kod svg { display: block; width: auto; height: auto; shape-rendering: crispEdges; }
+  @media (hover: hover) and (pointer: fine) { .qr { display: flex; } }
+
+  /* snímek appky v rámečku telefonu */
+  .telefon { margin: 0 auto; width: min(100%, 300px); padding: 9px; background: var(--ram); border-radius: 34px; box-shadow: 0 30px 60px -30px rgba(23, 25, 29, .55); }
+  .telefon img { display: block; width: 100%; height: auto; aspect-ratio: 1170 / 2532; border-radius: 26px; }
+
+  @media (min-width: 760px) {
+    main { grid-template-columns: minmax(0, 1fr) 320px; gap: 64px; padding-top: 48px; padding-bottom: 48px; }
+    .text { margin: 0; }
+    .telefon { width: 320px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="text">
+    <div class="hlava">
+      {{LOGO_DEKOR}}
+      <div>
+        <h1>Okruh</h1>
+        <p class="pod">Aplikace pro Android</p>
+      </div>
+    </div>
+    <p class="perex">Kam se dostaneš za hodinu autem, na kole nebo pěšky. Nebo do 100 km vzdušnou čarou.</p>
+
+    <a class="stahnout" id="stahnout" href="/okruh.apk?v={{KOD}}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+      Stáhnout
+    </a>
+    <p class="meta" id="meta">{{ANDROID}} · {{VELIKOST}} · verze {{VERZE}} · zdarma, bez účtu</p>
+    <p class="po" id="po" role="status" hidden>Soubor je stažený. Otevři v Chromu nabídku <b>⋮</b>, <b>Stažené soubory</b> a klepni na <b>okruh.apk</b>.</p>
+
+    <ol>
+      <li><b>Stáhni.</b> Když se Chrome zeptá, potvrď.</li>
+      <li><b>Otevři soubor.</b> Chrome: nabídka ⋮, Stažené soubory, okruh.apk.</li>
+      <li><b>Instalovat.</b> Napoprvé povol instalaci z Chromu. Když se ozve Play Protect: Podrobnosti, Přesto nainstalovat.</li>
+    </ol>
+
+    <div class="qr">
+      <div class="kod">{{QR}}</div>
+      <div><b>Jsi na počítači?</b><br>Naskenuj kód telefonem.</div>
+    </div>
+  </div>
+
+  <div class="telefon"><img src="/telefon.jpg?v={{KOD}}" width="1170" height="2532" alt="Okruh v telefonu: hodina autem kolem Prahy na mapě"></div>
+</main>
+<script>
+  // Chrome stáhne 41 kB dřív, než si toho člověk všimne, a druhé klepnutí jen nabídne
+  // "Stáhnout soubor znovu?". Proto po klepnutí stránka sama řekne, kde soubor najít.
+  document.getElementById("stahnout").addEventListener("click", function () {
+    setTimeout(function () {
+      document.getElementById("meta").hidden = true;
+      document.getElementById("po").hidden = false;
+    }, 1200);
+  });
+</script>
+</body>
+</html>
